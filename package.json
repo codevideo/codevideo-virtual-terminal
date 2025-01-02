@@ -37,6 +37,6 @@
     "typescript": "^5.4.2"
   },
   "peerDependencies": {
-    "@fullstackcraftllc/codevideo-types": "^1.5.3"
+    "@fullstackcraftllc/codevideo-types": "^1.6.0"
   }
 }

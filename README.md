@@ -22,7 +22,7 @@ const initialCommandHistory = [
 const virtualTerminal = new VirtualTerminal(initialCommandHistory);
 
 // Apply terminal editing actions
-VirtualTerminal.applyActions([
+virtualTerminal.applyActions([
   { name: 'arrow-up', value: '1' },  // Go to the previous command
   { name: 'arrow-down', value: '1' }, // Go to the next command
   { name: 'type-terminal', value: 'npm install' }, // Type 'npm install'
@@ -30,8 +30,8 @@ VirtualTerminal.applyActions([
 ]);
 
 // Get the final code and actions applied
-const finalTerminalState = VirtualTerminal.getState();
-const actionsApplied = VirtualTerminal.getActionsApplied();
+const finalTerminalState = virtualTerminal.getState();
+const actionsApplied = virtualTerminal.getActionsApplied();
 
 // Log the final code and actions applied
 console.log('Final terminal state:');
@@ -84,6 +84,6 @@ Get data for annotated frames.
 
 ## Why?
 
-Why do we need a seemingly useless class? This library, along with [`codevideo-virtual-code-block`](https://github.com/codevideo/codevideo-virtual-code-block) create the backbone of [`codevideo-virtual-code-editor`](https://github.com/codevideo/codevideo-virtual-code-editor) which are used to validate steps across the CodeVideo ecosystem. This is a small part of a larger project to create a declarative way to build, edit, and generate step by step educational video software courses.
+Why do we need a seemingly useless class? This library, along with the family of `virtual` components, are used in orchestration to create the `codevideo-virtual-ide`, a 100% time travalable, auditable, playable, and pausable IDE. This library is just a small part of a larger project to create a declarative way to build, edit, and generate step by step educational video software courses.
 
 See more at [codevideo.io](https://codevideo.io)

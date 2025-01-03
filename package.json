@@ -1,5 +1,5 @@
 {
-  "name": "@fullstackcraftllc/codevideo-virtual-code-terminal",
+  "name": "@fullstackcraftllc/codevideo-virtual-terminal",
   "version": "1.0.0",
   "description": "TypeScript class that simulates a single terminal.",
   "type": "module",
@@ -16,10 +16,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/codevideo/codevideo-virtual-code-terminal.git"
+    "url": "https://github.com/codevideo/codevideo-virtual-terminal.git"
   },
   "issues": {
-    "url": "https://github.com/codevideo/codevideo-virtual-code-terminal/issues"
+    "url": "https://github.com/codevideo/codevideo-virtual-terminal/issues"
   },
   "author": "Chris Frewin",
   "license": "MIT",

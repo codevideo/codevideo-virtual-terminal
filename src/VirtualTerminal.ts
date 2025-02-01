@@ -1,5 +1,4 @@
 import {
-  IAction,
   isRepeatableAction,
   TerminalAction,
 } from "@fullstackcraftllc/codevideo-types";

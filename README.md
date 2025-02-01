@@ -1,6 +1,6 @@
 # @fullstackcraft/codevideo-virtual-terminal
 
-![NPM Version](https://img.shields.io/npm/v/:fullstackcraftllc/codevideo-virtual-terminal)
+![NPM Version](https://img.shields.io/npm/v/@fullstackcraftllc/codevideo-virtual-terminal)
 
 `codevideo-virtual-terminal` is a TypeScript class that simulates a terminal with features like cursor navigation, text insertion, and line manipulation. It provides a flexible interface for applying various editing actions such as typing, moving the cursor, and executing commands. This lightweight and versatile library is ideal for building educational tools, code playgrounds, and interactive coding environments within web applications.
 

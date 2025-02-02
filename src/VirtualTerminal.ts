@@ -11,11 +11,15 @@ export class VirtualTerminal {
   private actionsApplied: TerminalAction[] = [];
   private verbose = false;
 
-  constructor(actions?: TerminalAction[], verbose?: boolean) {
-    this.verbose = verbose || false;
+  constructor(initialCommand?: string, actions?: TerminalAction[], verbose?: boolean) {
+    if (initialCommand) {
+      this.currentCommand = initialCommand;
+      this.caretPosition = initialCommand.length;
+    }
     if (actions) {
       this.applyActions(actions);
     }
+    this.verbose = verbose || false;
   }
 
   applyActions(actions: TerminalAction[]): string {

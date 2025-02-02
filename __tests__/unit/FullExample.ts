@@ -132,5 +132,10 @@ describe("VirtualTerminal", () => {
       expect(virtualTerminal.getCurrentCommand()).toBe("test-command");
       expect(virtualTerminal.getCurrentCaretPosition()).toBe("test-command".length);
     });
+
+    it("should handle initial command in the constructor", () => {
+      const virtualTerminal = new VirtualTerminal("npm install");
+      expect(virtualTerminal.getCurrentCommand()).toBe("npm install");
+    });
   });
 });

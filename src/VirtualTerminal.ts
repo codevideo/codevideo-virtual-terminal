@@ -19,14 +19,14 @@ export class VirtualTerminal {
   private historyIndex = -1;
   private actionsApplied: TerminalAction[] = [];
   private verbose = false;
-  private buffer: string[] = [];
+  private bufferLines: string[] = [];
 
   constructor(initialCommand?: string, actions?: TerminalAction[], verbose?: boolean) {
-    this.buffer.push(this.prompt);
+    this.bufferLines.push(this.prompt);
     if (initialCommand) {
       this.currentCommand = initialCommand;
       this.caretPosition = initialCommand.length;
-      this.buffer[0] += initialCommand;
+      this.bufferLines[0] += initialCommand;
     }
     if (actions) {
       this.applyActions(actions);
@@ -50,7 +50,7 @@ export class VirtualTerminal {
     switch (action.name) {
       // we also need a way to programmatically set the output of a command. that is done here:
       case "terminal-set-output":
-        this.addContentToBuffer(action.value);
+        this.addLinesToBufferLines(action.value);
         break;
       case "terminal-set-prompt":
         this.prompt = action.value;
@@ -66,17 +66,22 @@ export class VirtualTerminal {
           this.currentCommand.slice(this.caretPosition);
         this.caretPosition += action.value.length;
         // update current line in buffer
-        this.buffer[this.buffer.length - 1] = this.prompt + this.currentCommand;
+        this.bufferLines[this.bufferLines.length - 1] = this.prompt + this.currentCommand;
         break;
 
       case "terminal-enter":
+        // update buffer with the executed command
+        // this.bufferLines.push(this.prompt + this.currentCommand);
+
+        // update command history and index
         if (this.currentCommand.trim()) {
           this.commandHistory.push(this.currentCommand);
         }
         this.historyIndex = this.commandHistory.length;
+
+        // reset current command and caret position
         this.currentCommand = "";
         this.caretPosition = 0;
-        this.buffer.push(this.prompt + this.commandHistory[this.commandHistory.length - 1]);
         break;
 
       case "terminal-arrow-up":
@@ -200,11 +205,11 @@ export class VirtualTerminal {
   }
 
   getBuffer(): string[] {
-    return this.buffer;
+    return this.bufferLines;
   }
 
-  private addContentToBuffer(content: string): void {
-    this.buffer.push(content);
+  private addLinesToBufferLines(content: string): void {
+    this.bufferLines.push(content);
   }
 
   private setPresentWorkingDirectory(presentWorkingDirectory: string): void {

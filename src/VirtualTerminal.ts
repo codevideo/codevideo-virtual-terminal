@@ -209,7 +209,11 @@ export class VirtualTerminal {
   }
 
   private addLinesToBufferLines(content: string): void {
-    this.bufferLines.push(content);
+    // split content by newlines and add each line to the buffer
+    const lines = content.split("\n");
+    lines.forEach((line) => {
+      this.bufferLines.push(line);
+    });
   }
 
   private setPresentWorkingDirectory(presentWorkingDirectory: string): void {

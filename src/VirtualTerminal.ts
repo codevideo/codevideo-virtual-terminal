@@ -3,18 +3,30 @@ import {
   TerminalAction,
 } from "@fullstackcraftllc/codevideo-types";
 
+// Represents a virtual terminal that can be interacted with
+// via a series of actions. The terminal maintains a command
+// history and a current command that can be modified.
+// The terminal also maintains a caret position that can be
+// moved around the current command.
+// Finally, the terminal is also responsible for it's entire own buffer, for easy rendering in UIs.
 export class VirtualTerminal {
+  private presentWorkingDirectory = "~";
+  private prompt = `[codevideo.studio] [${this.presentWorkingDirectory}] /> `;
+
   private caretPosition = 0;
   private currentCommand = "";
   private commandHistory: string[] = [];
   private historyIndex = -1;
   private actionsApplied: TerminalAction[] = [];
   private verbose = false;
+  private buffer: string[] = [];
 
   constructor(initialCommand?: string, actions?: TerminalAction[], verbose?: boolean) {
+    this.buffer.push(this.prompt);
     if (initialCommand) {
       this.currentCommand = initialCommand;
       this.caretPosition = initialCommand.length;
+      this.buffer[0] += initialCommand;
     }
     if (actions) {
       this.applyActions(actions);
@@ -36,6 +48,16 @@ export class VirtualTerminal {
     }
 
     switch (action.name) {
+      // we also need a way to programmatically set the output of a command. that is done here:
+      case "terminal-set-output":
+        this.addContentToBuffer(action.value);
+        break;
+      case "terminal-set-prompt":
+        this.prompt = action.value;
+        break;
+      case "terminal-set-present-working-directory":
+        this.setPresentWorkingDirectory(action.value);
+        break;
       case "terminal-type":
         // Insert text at current caret position
         this.currentCommand = 
@@ -52,6 +74,7 @@ export class VirtualTerminal {
         this.historyIndex = this.commandHistory.length;
         this.currentCommand = "";
         this.caretPosition = 0;
+        this.buffer.push(this.prompt + this.commandHistory[this.commandHistory.length - 1]);
         break;
 
       case "terminal-arrow-up":
@@ -97,15 +120,16 @@ export class VirtualTerminal {
         }
         break;
 
-      case "terminal-backspace":
-        for (let i = 0; i < numTimes; i++) {
-          if (this.caretPosition < this.currentCommand.length) {
-            this.currentCommand = 
-              this.currentCommand.slice(0, this.caretPosition) + 
-              this.currentCommand.slice(this.caretPosition + 1);
-          }
-        }
-        break;
+        // is this like a delete key? we don't have the action name for it...
+      // case "terminal-delete":
+      //   for (let i = 0; i < numTimes; i++) {
+      //     if (this.caretPosition < this.currentCommand.length) {
+      //       this.currentCommand = 
+      //         this.currentCommand.slice(0, this.caretPosition) + 
+      //         this.currentCommand.slice(this.caretPosition + 1);
+      //     }
+      //   }
+      //   break;
 
       case "terminal-space":
         this.currentCommand = 
@@ -163,5 +187,26 @@ export class VirtualTerminal {
 
   getActionsApplied(): TerminalAction[] {
     return this.actionsApplied;
+  }
+
+  getPrompt(): string {
+    return this.prompt;
+  }
+
+  getPresentWorkingDirectory(): string {
+    return this.presentWorkingDirectory;
+  }
+
+  getBuffer(): string[] {
+    return this.buffer;
+  }
+
+  private addContentToBuffer(content: string): void {
+    this.buffer.push(content);
+  }
+
+  private setPresentWorkingDirectory(presentWorkingDirectory: string): void {
+    this.presentWorkingDirectory = presentWorkingDirectory;
+    this.prompt = `[codevideo.studio] [${this.presentWorkingDirectory}] /> `;
   }
 }

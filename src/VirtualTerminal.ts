@@ -65,6 +65,8 @@ export class VirtualTerminal {
           action.value + 
           this.currentCommand.slice(this.caretPosition);
         this.caretPosition += action.value.length;
+        // update current line in buffer
+        this.buffer[this.buffer.length - 1] = this.prompt + this.currentCommand;
         break;
 
       case "terminal-enter":

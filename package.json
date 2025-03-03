@@ -1,6 +1,6 @@
 {
   "name": "@fullstackcraftllc/codevideo-virtual-terminal",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "TypeScript class that simulates a single terminal.",
   "type": "module",
   "main": "dist/index.js",

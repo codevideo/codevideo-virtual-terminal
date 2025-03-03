@@ -3,12 +3,14 @@ import {
   TerminalAction,
 } from "@fullstackcraftllc/codevideo-types";
 
-// Represents a virtual terminal that can be interacted with
-// via a series of actions. The terminal maintains a command
-// history and a current command that can be modified.
-// The terminal also maintains a caret position that can be
-// moved around the current command.
-// Finally, the terminal is also responsible for it's entire own buffer, for easy rendering in UIs.
+/**
+ * Represents a virtual terminal that can be interacted with
+ * via a series of actions. The terminal maintains a command
+ * history and a current command that can be modified.
+ * The terminal also maintains a caret position that can be
+ * moved around the current command.
+ * Finally, the terminal is also responsible for it's entire own buffer, for easy rendering in UIs.
+ */
 export class VirtualTerminal {
   private presentWorkingDirectory = "~";
   private prompt = `[codevideo.studio] [${this.presentWorkingDirectory}] /> `;
@@ -34,6 +36,11 @@ export class VirtualTerminal {
     this.verbose = verbose || false;
   }
 
+  /**
+   * Applies a series of actions to the virtual terminal
+   * @param actions The actions to apply
+   * @returns The current command after applying the actions
+   */
   applyActions(actions: TerminalAction[]): string {
     actions.forEach((action) => {
       this.applyAction(action);
@@ -41,6 +48,11 @@ export class VirtualTerminal {
     return this.getCurrentCommand();
   }
 
+  /**
+   * Applies a single action to the virtual terminal
+   * @param action The action to apply
+   * @returns The current command after applying the action
+   */
   applyAction(action: TerminalAction): string {
     let numTimes = 1;
     if (isRepeatableAction(action)) {
@@ -60,9 +72,9 @@ export class VirtualTerminal {
         break;
       case "terminal-type":
         // Insert text at current caret position
-        this.currentCommand = 
-          this.currentCommand.slice(0, this.caretPosition) + 
-          action.value + 
+        this.currentCommand =
+          this.currentCommand.slice(0, this.caretPosition) +
+          action.value +
           this.currentCommand.slice(this.caretPosition);
         this.caretPosition += action.value.length;
         // update current line in buffer
@@ -119,15 +131,15 @@ export class VirtualTerminal {
       case "terminal-backspace":
         for (let i = 0; i < numTimes; i++) {
           if (this.caretPosition > 0) {
-            this.currentCommand = 
-              this.currentCommand.slice(0, this.caretPosition - 1) + 
+            this.currentCommand =
+              this.currentCommand.slice(0, this.caretPosition - 1) +
               this.currentCommand.slice(this.caretPosition);
             this.caretPosition--;
           }
         }
         break;
 
-        // is this like a delete key? we don't have the action name for it...
+      // is this like a delete key? we don't have the action name for it...
       // case "terminal-delete":
       //   for (let i = 0; i < numTimes; i++) {
       //     if (this.caretPosition < this.currentCommand.length) {
@@ -139,17 +151,17 @@ export class VirtualTerminal {
       //   break;
 
       case "terminal-space":
-        this.currentCommand = 
-          this.currentCommand.slice(0, this.caretPosition) + 
-          " " + 
+        this.currentCommand =
+          this.currentCommand.slice(0, this.caretPosition) +
+          " " +
           this.currentCommand.slice(this.caretPosition);
         this.caretPosition++;
         break;
 
       case "terminal-tab":
-        this.currentCommand = 
-          this.currentCommand.slice(0, this.caretPosition) + 
-          "\t" + 
+        this.currentCommand =
+          this.currentCommand.slice(0, this.caretPosition) +
+          "\t" +
           this.currentCommand.slice(this.caretPosition);
         this.caretPosition++;
         break;
@@ -180,32 +192,68 @@ export class VirtualTerminal {
     return this.getCurrentCommand();
   }
 
+  /**
+   * Returns the current state of the virtual terminal
+   * @returns The current state of the virtual terminal
+   */
   getCurrentCommand(): string {
     return this.currentCommand;
   }
 
+  /**
+   * Returns the command history of the virtual terminal
+   * @returns The command history of the virtual terminal
+   */
   getCommandHistory(): string[] {
     return this.commandHistory;
   }
 
+  /**
+   * Returns the current caret position of the virtual terminal
+   * @returns The current caret position of the virtual terminal
+   */
   getCurrentCaretPosition(): number {
     return this.caretPosition;
   }
 
+  /**
+   * Returns the actions applied to the virtual terminal
+   * @returns The actions applied to the virtual terminal
+   */
   getActionsApplied(): TerminalAction[] {
     return this.actionsApplied;
   }
 
+  /**
+   * Returns the prompt of the virtual terminal
+   * @returns The prompt of the virtual terminal
+   */
   getPrompt(): string {
     return this.prompt;
   }
 
+  /**
+   * Returns the present working directory of the virtual terminal
+   * @returns The present working directory of the virtual
+   */
   getPresentWorkingDirectory(): string {
     return this.presentWorkingDirectory;
   }
 
+  /**
+   * Returns the buffer of the virtual terminal
+   * @returns The buffer of the virtual terminal
+   */
   getBuffer(): string[] {
     return this.bufferLines;
+  }
+
+  /**
+  * Sets the verbose mode for the virtual terminal
+  * @param verbose Whether to enable verbose
+  */
+  setVerbose(verbose: boolean): void {
+    this.verbose = verbose;
   }
 
   private addLinesToBufferLines(content: string): void {

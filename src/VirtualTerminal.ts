@@ -1,5 +1,6 @@
 import {
   isRepeatableAction,
+  ITerminal,
   TerminalAction,
 } from "@fullstackcraftllc/codevideo-types";
 
@@ -34,6 +35,15 @@ export class VirtualTerminal {
       this.applyActions(actions);
     }
     this.verbose = verbose || false;
+  }
+
+  /**
+   * TODO: the ITerminal interface differs wildly from the virtual terminal class. but perhaps this is okay since reconstitution from state may only need the content...
+   * Sets the values of the virtual terminal from a terminal object
+   * @param terminal The terminal object to set the values from
+   */
+  setValuesFromTerminal(terminal: ITerminal): void {
+    this.bufferLines = terminal.content?.split("\n") || [];
   }
 
   /**
